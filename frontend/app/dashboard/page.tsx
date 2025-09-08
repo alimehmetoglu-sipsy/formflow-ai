@@ -69,6 +69,7 @@ export default function DashboardPage() {
   }
 
   const getDashboardIcon = (type?: string) => {
+    if (!type) return '📄'
     const icons: { [key: string]: string } = {
       'diet_plan': '🥗',
       'lead_score': '📊',
