@@ -98,15 +98,20 @@ cat > .firebaserc << EOF
 }
 EOF
 
+# Enable Firebase in the project
+echo ""
+echo "4️⃣ Enabling Firebase in project..."
+firebase projects:addfirebase $PROJECT_ID 2>/dev/null || echo "Firebase already enabled"
+
 # Initialize Firebase (non-interactive)
 echo ""
-echo "4️⃣ Initializing Firebase..."
-firebase use $PROJECT_ID --add
+echo "5️⃣ Initializing Firebase..."
+firebase use $PROJECT_ID 2>/dev/null || firebase use --add $PROJECT_ID
 
 # Deploy to Firebase Hosting
 echo ""
-echo "5️⃣ Deploying to Firebase Hosting..."
-firebase deploy --only hosting --project $PROJECT_ID
+echo "6️⃣ Deploying to Firebase Hosting..."
+firebase deploy --only hosting --project $PROJECT_ID --non-interactive
 
 echo ""
 echo "===========================================" 
