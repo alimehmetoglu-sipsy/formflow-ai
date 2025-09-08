@@ -64,18 +64,13 @@ echo "✅ Service account configured"
 echo ""
 echo "3️⃣ Updating Load Balancer backend services..."
 
-# Update health checks
-gcloud compute health-checks create http formflow-health \
-  --port=8080 \
-  --request-path=/health \
-  --global 2>/dev/null || echo "Health check already exists"
+# Note: Serverless NEGs don't need health checks - Cloud Run handles this automatically
 
-# Update backend service for frontend
+# Update backend service for frontend (without health check)
 gcloud compute backend-services update formflow-frontend-service \
   --global \
   --timeout=30 \
   --connection-draining-timeout=30 \
-  --health-checks=formflow-health \
   --quiet
 
 # Create backend service for API if not exists
@@ -87,6 +82,13 @@ gcloud compute backend-services add-backend formflow-backend-service \
   --global \
   --network-endpoint-group=formflow-backend-neg \
   --network-endpoint-group-region=$REGION 2>/dev/null || echo "Backend already added"
+
+# Update backend service for API (without health check)
+gcloud compute backend-services update formflow-backend-service \
+  --global \
+  --timeout=30 \
+  --connection-draining-timeout=30 \
+  --quiet
 
 echo "✅ Backend services updated"
 
