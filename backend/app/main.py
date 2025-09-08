@@ -10,8 +10,18 @@ from app.middleware.security import setup_security
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    setup_monitoring()
-    Base.metadata.create_all(bind=engine)
+    try:
+        setup_monitoring()
+    except Exception as e:
+        print(f"Warning: Could not setup monitoring: {e}")
+    
+    try:
+        Base.metadata.create_all(bind=engine)
+        print(f"✅ Database tables created successfully")
+    except Exception as e:
+        print(f"Warning: Could not create database tables: {e}")
+        # Continue anyway for Cloud Run
+    
     print(f"🚀 {settings.APP_NAME} v{settings.VERSION} started successfully!")
     yield
     # Shutdown
