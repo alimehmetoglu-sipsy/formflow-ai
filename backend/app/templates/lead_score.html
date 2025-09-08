@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Analysis Report - FormFlow AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .pulse { animation: pulse 2s infinite; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="text-3xl">📊</span>
+                </div>
+                <h1 class="text-4xl lg:text-6xl font-bold mb-4">Lead Analysis Report</h1>
+                <p class="text-xl lg:text-2xl opacity-90">AI-powered lead qualification and insights</p>
+                <div class="mt-8 inline-flex items-center px-4 py-2 bg-white/20 rounded-full">
+                    <span class="pulse w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                    <span class="text-sm font-medium">Real-time Analysis</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Lead Score Card -->
+    <div class="container mx-auto px-4 -mt-12 relative z-20">
+        <div class="bg-white rounded-xl shadow-xl p-8 text-center max-w-2xl mx-auto">
+            {% set score = data.lead_score or 0 %}
+            {% set category = data.lead_category or "Unknown" %}
+            {% set color_class = "green" if score > 70 else "yellow" if score > 40 else "red" %}
+            
+            <div class="relative inline-block">
+                <div class="text-8xl font-bold text-{{ color_class }}-600 mb-2">{{ score }}</div>
+                <div class="text-sm text-gray-500 absolute -top-2 -right-8">/100</div>
+            </div>
+            <div class="text-2xl text-gray-700 font-semibold mb-4">{{ category }} Lead</div>
+            
+            <!-- Score Indicator -->
+            <div class="w-full bg-gray-200 rounded-full h-3 mb-6">
+                <div class="bg-{{ color_class }}-600 h-3 rounded-full transition-all duration-1000" style="width: {{ score }}%"></div>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4 text-sm">
+                <div class="{% if score > 70 %}text-green-600{% else %}text-gray-400{% endif %}">
+                    <div class="font-semibold">Hot</div>
+                    <div class="text-xs">71-100</div>
+                </div>
+                <div class="{% if score > 40 and score <= 70 %}text-yellow-600{% else %}text-gray-400{% endif %}">
+                    <div class="font-semibold">Warm</div>
+                    <div class="text-xs">41-70</div>
+                </div>
+                <div class="{% if score <= 40 %}text-red-600{% else %}text-gray-400{% endif %}">
+                    <div class="font-semibold">Cold</div>
+                    <div class="text-xs">0-40</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Score Breakdown -->
+    {% if data.score_breakdown %}
+    <div class="container mx-auto px-4 mt-16">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">Score Breakdown</h2>
+        
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Scoring Factors</h3>
+                    <div class="space-y-4">
+                        {% for factor, score in data.score_breakdown.items() %}
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-medium text-gray-700">{{ factor.replace('_', ' ').title() }}</span>
+                                <span class="font-bold text-gray-900">{{ score }}/100</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                {% set color = "bg-green-500" if score > 70 else "bg-yellow-500" if score > 40 else "bg-red-500" %}
+                                <div class="{{ color }} h-2 rounded-full transition-all duration-1000" style="width: {{ score }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-6">Score Visualization</h3>
+                    <div class="relative">
+                        <canvas id="scoreChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Key Insights -->
+    {% if data.key_insights %}
+    <div class="container mx-auto px-4 mt-16">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">🔍 Key Insights</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for insight in data.key_insights %}
+            <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+                <div class="flex items-start">
+                    <div class="text-blue-500 text-xl mr-3 mt-1">💡</div>
+                    <p class="text-gray-700">{{ insight }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Recommended Actions -->
+    {% if data.recommended_actions %}
+    <div class="bg-gradient-to-r from-green-50 to-blue-50 py-16 mt-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">🎯 Recommended Actions</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                {% for action in data.recommended_actions %}
+                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <div class="flex items-start">
+                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-4 mt-1">
+                            <span class="text-green-600 font-bold text-sm">{{ loop.index }}</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-gray-800 font-medium">{{ action }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if data.follow_up_timeline %}
+            <div class="text-center mt-8">
+                <div class="inline-flex items-center px-6 py-3 bg-white rounded-full shadow-md">
+                    <span class="text-orange-500 mr-2">⏰</span>
+                    <span class="font-semibold text-gray-800">Follow up: {{ data.follow_up_timeline }}</span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Risk Factors & Value -->
+    <div class="container mx-auto px-4 mt-16">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Risk Factors -->
+            {% if data.risk_factors %}
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-red-500 mr-2">⚠️</span>
+                    Risk Factors
+                </h3>
+                <div class="space-y-3">
+                    {% for risk in data.risk_factors %}
+                    <div class="flex items-start">
+                        <div class="w-2 h-2 bg-red-500 rounded-full mr-3 mt-2"></div>
+                        <p class="text-gray-700">{{ risk }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Potential Value -->
+            <div class="bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <span class="text-green-500 mr-2">💰</span>
+                    Potential Value
+                </h3>
+                
+                {% if data.potential_value %}
+                <div class="text-3xl font-bold text-green-600 mb-4">{{ data.potential_value }}</div>
+                {% endif %}
+                
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Deal Size:</span>
+                        <span class="font-semibold">{{ data.potential_value or "TBD" }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Close Probability:</span>
+                        <span class="font-semibold">{{ score }}%</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Expected Value:</span>
+                        <span class="font-semibold text-green-600">${{ (score / 100 * 25000) | round(0) | int }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Conversation Starters -->
+    {% if data.conversation_starters %}
+    <div class="container mx-auto px-4 mt-16 mb-16">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">💬 Conversation Starters</h2>
+        
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <div class="grid md:grid-cols-2 gap-6">
+                {% for starter in data.conversation_starters %}
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+                    <div class="flex items-start">
+                        <div class="text-blue-500 text-xl mr-3">💭</div>
+                        <p class="text-gray-800 italic">"{{ starter }}"</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Footer -->
+    <div class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold mb-2">🤖 Generated by FormFlow AI</h3>
+                <p class="text-gray-400">Intelligent lead analysis powered by AI</p>
+            </div>
+            <div class="flex justify-center space-x-6 text-sm">
+                <a href="https://formflow.ai" class="text-gray-400 hover:text-white transition-colors">FormFlow.ai</a>
+                <span class="text-gray-600">|</span>
+                <span class="text-gray-400">Powered by GPT-4</span>
+                <span class="text-gray-600">|</span>
+                <span class="text-gray-400">Made with ❤️</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chart.js Script -->
+    {% if data.score_breakdown %}
+    <script>
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        const scoreChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    {% for factor in data.score_breakdown.keys() %}
+                    '{{ factor.replace("_", " ").title() }}'{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                datasets: [{
+                    data: [
+                        {% for score in data.score_breakdown.values() %}
+                        {{ score }}{% if not loop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    backgroundColor: [
+                        '#3b82f6',
+                        '#06b6d4',
+                        '#10b981',
+                        '#f59e0b',
+                        '#ef4444'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+</body>
+</html>

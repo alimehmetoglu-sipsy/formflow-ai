@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/playwright:v1.48.1-focal
+
+# Playwright image already has Node.js installed
+# Install Playwright MCP server
+RUN npm install -g @playwright/mcp@latest
+
+# Create a working directory
+WORKDIR /app
+
+# Expose the MCP communication
+EXPOSE 9222
+
+# Keep container running
+CMD ["tail", "-f", "/dev/null"]

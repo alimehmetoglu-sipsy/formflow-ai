@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Personalized Diet Plan - FormFlow AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .float { animation: float 6s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 bg-black/20"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center">
+                <div class="float mb-6">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto">
+                        <span class="text-2xl">🥗</span>
+                    </div>
+                </div>
+                <h1 class="text-4xl lg:text-6xl font-bold mb-4">Your 7-Day Diet Plan</h1>
+                <p class="text-xl lg:text-2xl opacity-90 max-w-2xl mx-auto">
+                    Personalized nutrition for {{ data.user_profile.goals if data.user_profile else "your health goals" }}
+                </p>
+                <div class="mt-8 inline-flex items-center px-4 py-2 bg-white/20 rounded-full">
+                    <span class="animate-pulse w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                    <span class="text-sm font-medium">AI Generated Plan</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="container mx-auto px-4 -mt-12 relative z-20">
+        <div class="grid md:grid-cols-4 gap-6">
+            <div class="bg-white rounded-xl shadow-xl p-6 text-center transform hover:scale-105 transition-transform">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl">🔥</span>
+                </div>
+                <div class="text-gray-500 text-sm font-medium">Daily Calories</div>
+                <div class="text-3xl font-bold text-purple-600">{{ data.daily_calories or 2000 }}</div>
+                <div class="text-xs text-gray-400 mt-1">kcal</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-xl p-6 text-center transform hover:scale-105 transition-transform">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl">💪</span>
+                </div>
+                <div class="text-gray-500 text-sm font-medium">Protein</div>
+                <div class="text-3xl font-bold text-blue-600">{{ data.macro_breakdown.protein if data.macro_breakdown else 150 }}g</div>
+                <div class="text-xs text-gray-400 mt-1">{{ ((data.macro_breakdown.protein if data.macro_breakdown else 150) * 4 / (data.daily_calories or 2000) * 100) | round(1) }}%</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-xl p-6 text-center transform hover:scale-105 transition-transform">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl">🌾</span>
+                </div>
+                <div class="text-gray-500 text-sm font-medium">Carbs</div>
+                <div class="text-3xl font-bold text-green-600">{{ data.macro_breakdown.carbs if data.macro_breakdown else 200 }}g</div>
+                <div class="text-xs text-gray-400 mt-1">{{ ((data.macro_breakdown.carbs if data.macro_breakdown else 200) * 4 / (data.daily_calories or 2000) * 100) | round(1) }}%</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-xl p-6 text-center transform hover:scale-105 transition-transform">
+                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <span class="text-xl">🥑</span>
+                </div>
+                <div class="text-gray-500 text-sm font-medium">Fat</div>
+                <div class="text-3xl font-bold text-orange-600">{{ data.macro_breakdown.fat if data.macro_breakdown else 65 }}g</div>
+                <div class="text-xs text-gray-400 mt-1">{{ ((data.macro_breakdown.fat if data.macro_breakdown else 65) * 9 / (data.daily_calories or 2000) * 100) | round(1) }}%</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Weekly Meal Plan -->
+    <div class="container mx-auto px-4 mt-16">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Weekly Meal Plan</h2>
+            <p class="text-gray-600">Delicious, balanced meals for every day of the week</p>
+        </div>
+        
+        <div class="grid lg:grid-cols-7 md:grid-cols-3 sm:grid-cols-2 gap-4">
+            {% for day, meals in data.meal_plan.items() if data.meal_plan %}
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-4">
+                    <h3 class="font-bold text-center">{{ day.title() }}</h3>
+                </div>
+                <div class="p-4 space-y-4">
+                    {% if meals.breakfast %}
+                    <div>
+                        <div class="text-xs text-gray-500 mb-1 flex items-center">
+                            <span class="mr-1">🌅</span> Breakfast
+                        </div>
+                        <div class="text-sm font-semibold text-gray-800">{{ meals.breakfast.meal }}</div>
+                        <div class="text-xs text-gray-400">{{ meals.breakfast.calories }} cal</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if meals.lunch %}
+                    <div>
+                        <div class="text-xs text-gray-500 mb-1 flex items-center">
+                            <span class="mr-1">☀️</span> Lunch
+                        </div>
+                        <div class="text-sm font-semibold text-gray-800">{{ meals.lunch.meal }}</div>
+                        <div class="text-xs text-gray-400">{{ meals.lunch.calories }} cal</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if meals.dinner %}
+                    <div>
+                        <div class="text-xs text-gray-500 mb-1 flex items-center">
+                            <span class="mr-1">🌙</span> Dinner
+                        </div>
+                        <div class="text-sm font-semibold text-gray-800">{{ meals.dinner.meal }}</div>
+                        <div class="text-xs text-gray-400">{{ meals.dinner.calories }} cal</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if meals.snacks %}
+                    <div>
+                        <div class="text-xs text-gray-500 mb-1">🍎 Snacks</div>
+                        <div class="text-xs text-gray-600">
+                            {% for snack in meals.snacks %}
+                                {{ snack }}{% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Shopping List -->
+    <div class="container mx-auto px-4 mt-16 mb-16">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Shopping List</h2>
+            <p class="text-gray-600">Everything you need for your weekly meal prep</p>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                {% if data.shopping_list %}
+                {% for category, items in data.shopping_list.items() %}
+                {% if items %}
+                <div>
+                    <h3 class="font-bold text-lg text-gray-800 mb-4 flex items-center">
+                        {% if category == 'proteins' %}🥩
+                        {% elif category == 'vegetables' %}🥬
+                        {% elif category == 'fruits' %}🍎
+                        {% elif category == 'grains' %}🌾
+                        {% elif category == 'dairy' %}🥛
+                        {% else %}🛒
+                        {% endif %}
+                        <span class="ml-2">{{ category.title() }}</span>
+                    </h3>
+                    <ul class="space-y-2">
+                        {% for item in items %}
+                        <li class="text-gray-700 flex items-center">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-3 flex-shrink-0"></div>
+                            {{ item }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tips Section -->
+    {% if data.tips %}
+    <div class="bg-gradient-to-r from-blue-50 to-purple-50 py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-10">💡 Pro Tips</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for tip in data.tips %}
+                <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-blue-500 text-2xl mb-3">💡</div>
+                    <p class="text-gray-700">{{ tip }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Footer -->
+    <div class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-6">
+                <h3 class="text-2xl font-bold mb-2">🤖 Generated by FormFlow AI</h3>
+                <p class="text-gray-400">Transform your forms into intelligent dashboards</p>
+            </div>
+            <div class="flex justify-center space-x-6 text-sm">
+                <a href="https://formflow.ai" class="text-gray-400 hover:text-white transition-colors">FormFlow.ai</a>
+                <span class="text-gray-600">|</span>
+                <span class="text-gray-400">Powered by GPT-4</span>
+                <span class="text-gray-600">|</span>
+                <span class="text-gray-400">Made with ❤️</span>
+            </div>
+            {% if data.warnings %}
+            <div class="mt-8 text-xs text-gray-500">
+                <p class="mb-2">⚠️ Disclaimers:</p>
+                {% for warning in data.warnings %}
+                <p>{{ warning }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

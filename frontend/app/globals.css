@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-white text-gray-900;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  
+  .text-gradient {
+    @apply text-transparent bg-clip-text bg-gradient-to-r;
+  }
+  
+  .glass-effect {
+    @apply bg-white/20 backdrop-blur-sm border border-white/30;
+  }
+  
+  .gradient-border {
+    @apply bg-gradient-to-r from-purple-500 to-pink-500 p-0.5 rounded-xl;
+  }
+  
+  .gradient-border-inner {
+    @apply bg-white rounded-[calc(0.75rem-2px)] p-6;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #8b5cf6, #ec4899);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #7c3aed, #db2777);
+}
+
+/* Remove default focus outline and add custom */
+*:focus {
+  outline: none;
+  @apply ring-2 ring-purple-500 ring-opacity-50;
+}
+
+/* Loading animation */
+.loading {
+  @apply animate-pulse;
+}
+
+/* Hover effects */
+.hover-lift {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
