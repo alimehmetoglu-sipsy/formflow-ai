@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Boolean, DateTime, Enum as SQLEnum
+from sqlalchemy.orm import relationship
 from app.database import Base
 from passlib.context import CryptContext
 import uuid
@@ -42,6 +43,10 @@ class User(Base):
     onboarding_completed = Column(Boolean, default=False)
     typeform_connected = Column(Boolean, default=False)
     typeform_api_key = Column(String, nullable=True)
+    
+    # Relationships
+    custom_templates = relationship("CustomTemplate", back_populates="user")
+    webhook_configs = relationship("WebhookConfig", back_populates="user")
     
     @property
     def name(self):

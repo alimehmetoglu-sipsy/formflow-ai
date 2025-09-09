@@ -27,11 +27,16 @@ class Dashboard(Base):
     id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
     submission_id = Column(String, ForeignKey("form_submissions.id"))
     template_type = Column(String)  # diet_plan, lead_score, event, generic
+    template_id = Column(String, ForeignKey("dashboard_templates.id"))
     ai_generated_content = Column(JSON)
     html_content = Column(Text)
+    widgets = Column(JSON)  # Widget configurations for this dashboard
+    theme = Column(JSON)  # Theme configuration
+    layout = Column(JSON)  # Layout configuration
     view_count = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
-    # Relationship
+    # Relationships
     submission = relationship("FormSubmission", back_populates="dashboard")
+    widget_configurations = relationship("WidgetConfiguration", back_populates="dashboard")

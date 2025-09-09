@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from app.config import settings
 from app.database import engine, Base
-from app.api.v1 import health, webhooks, dashboards, billing, auth, users, onboarding
+from app.api.v1 import health, webhooks, dashboards, billing, auth, users, onboarding, templates
 from app.monitoring import setup_monitoring
 from app.middleware.security import setup_security
 
@@ -54,6 +54,7 @@ app.include_router(billing.router, prefix="/api/v1/billing", tags=["billing"])
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["authentication"])
 app.include_router(users.router, prefix="/api/v1/users", tags=["users"])
 app.include_router(onboarding.router, prefix="/api/v1", tags=["onboarding"])
+app.include_router(templates.router, prefix="/api/v1/templates", tags=["templates"])
 
 @app.get("/")
 async def root():

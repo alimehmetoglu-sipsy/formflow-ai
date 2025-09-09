@@ -105,7 +105,22 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
+              <nav className="flex items-center gap-6">
+                <Link
+                  href="/forms"
+                  className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+                >
+                  Forms
+                </Link>
+                <Link
+                  href="/dashboard/templates"
+                  className="text-sm font-medium text-gray-700 hover:text-purple-600 transition-colors"
+                >
+                  Templates
+                </Link>
+              </nav>
+              
               <span className="text-sm text-gray-600">
                 Welcome, {user?.name || 'User'}
               </span>
@@ -166,6 +181,24 @@ export default function DashboardPage() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="flex gap-4 mb-8">
+          <Link
+            href="/dashboard/templates"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200"
+          >
+            <span className="text-xl">🎨</span>
+            Browse Templates
+          </Link>
+          <Link
+            href="/dashboard/editor/new"
+            className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-200 text-gray-700 font-semibold rounded-lg hover:border-purple-600 hover:text-purple-600 transition-all duration-200"
+          >
+            <span className="text-xl">✨</span>
+            Create Custom Dashboard
+          </Link>
         </div>
 
         {/* Dashboards Grid */}

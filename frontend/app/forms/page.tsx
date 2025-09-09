@@ -53,7 +53,7 @@ export default function FormsPage() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {/* Typeform Card */}
           <Link href="/forms/connect" className="group">
             <div className="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
@@ -139,28 +139,105 @@ export default function FormsPage() {
               </div>
             </div>
           </Link>
+
+          {/* Custom Webhook Card */}
+          <Link href="/forms/custom" className="group">
+            <div className="bg-white rounded-2xl shadow-xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-purple-200">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
+                  <span className="text-2xl font-bold text-white">🔧</span>
+                </div>
+                <div className="ml-4">
+                  <h2 className="text-2xl font-bold text-gray-900">Custom Webhook</h2>
+                  <span className="inline-block px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-sm mt-1">
+                    Advanced
+                  </span>
+                </div>
+              </div>
+              
+              <p className="text-gray-600 mb-6">
+                Connect any form platform with custom webhooks and field mapping. Perfect for JotForm, Microsoft Forms, and more.
+              </p>
+              
+              <div className="space-y-2 mb-6">
+                <div className="flex items-center text-sm text-gray-700">
+                  <span className="text-green-500 mr-2">✓</span>
+                  Any form platform
+                </div>
+                <div className="flex items-center text-sm text-gray-700">
+                  <span className="text-green-500 mr-2">✓</span>
+                  Custom field mapping
+                </div>
+                <div className="flex items-center text-sm text-gray-700">
+                  <span className="text-green-500 mr-2">✓</span>
+                  Platform presets included
+                </div>
+              </div>
+              
+              <div className="inline-flex items-center text-orange-600 group-hover:text-orange-700 font-semibold">
+                Setup Custom Webhook
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
         </div>
 
-        {/* Coming Soon Section */}
-        <div className="mt-12 bg-white/60 backdrop-blur-sm rounded-2xl p-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Coming Soon</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-              <span className="text-sm text-gray-500">Jotform</span>
+        {/* Now Available via Custom Webhook */}
+        <div className="mt-12 bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-2">🎉 Now Available via Custom Webhook!</h3>
+          <p className="text-gray-600 mb-6">
+            Connect these platforms and many more using our new Custom Webhook integration with pre-built field mappings
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-gradient-to-r from-orange-400 to-orange-500 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                <span className="text-white font-bold">J</span>
+              </div>
+              <span className="text-sm font-medium text-gray-700">JotForm</span>
             </div>
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-              <span className="text-sm text-gray-500">Microsoft Forms</span>
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                <span className="text-white font-bold">M</span>
+              </div>
+              <span className="text-sm font-medium text-gray-700">Microsoft Forms</span>
             </div>
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-              <span className="text-sm text-gray-500">SurveyMonkey</span>
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                <span className="text-white font-bold">🐵</span>
+              </div>
+              <span className="text-sm font-medium text-gray-700">SurveyMonkey</span>
             </div>
-            <div className="text-center p-4">
-              <div className="w-12 h-12 bg-gray-200 rounded-lg mx-auto mb-2"></div>
-              <span className="text-sm text-gray-500">Airtable Forms</span>
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-gradient-to-r from-red-400 to-pink-500 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                <span className="text-white font-bold">A</span>
+              </div>
+              <span className="text-sm font-medium text-gray-700">Airtable Forms</span>
             </div>
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                <span className="text-white font-bold">C</span>
+              </div>
+              <span className="text-sm font-medium text-gray-700">Cognito Forms</span>
+            </div>
+            <div className="text-center p-4 bg-white rounded-lg shadow-sm">
+              <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg mx-auto mb-2 flex items-center justify-center">
+                <span className="text-white font-bold">W</span>
+              </div>
+              <span className="text-sm font-medium text-gray-700">WPForms</span>
+            </div>
+          </div>
+          <div className="text-center mt-6">
+            <Link
+              href="/forms/custom"
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white font-semibold rounded-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200"
+            >
+              🔧 Setup Custom Webhook
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
           </div>
         </div>
       </main>
